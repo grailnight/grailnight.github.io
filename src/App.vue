@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
@@ -37,7 +38,18 @@ export default {
   },
   methods: {
     submitForm() {
-      // Здесь будет код для отправки данных в MongoDB
+      axios
+        .post("http://localhost:3001/add", {
+          carBrand: this.carBrand,
+          carNumber: this.carNumber,
+          carType: this.carType,
+        })
+        .then((response) => {
+          console.log("Данные успешно добавлены:", response.data);
+        })
+        .catch((error) => {
+          console.error("Ошибка при добавлении данных:", error);
+        });
     },
   },
 };

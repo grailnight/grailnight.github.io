@@ -7,7 +7,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect('mongodb://localhost:27017/moika', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://127.0.0.1:27017/Moika', { useNewUrlParser: true, useUnifiedTopology: true });
+
 
 const ZakazSchema = new mongoose.Schema({
   carBrand: String,
@@ -15,15 +16,25 @@ const ZakazSchema = new mongoose.Schema({
   carType: String
 });
 
-const Zakaz = mongoose.model('Zakaz', ZakazSchema);
+const Zakaz = mongoose.model('Zakaz', ZakazSchema, 'Zakaz');
 
-app.post('/add', (req, res) => {
+
+app.post('/add', async (req, res) => {
+  console.log("Получен запрос:", req.body); // Логирование полученных данных
+
   const newZakaz = new Zakaz(req.body);
-  newZakaz.save((err, zakaz) => {
-    if (err) return res.status(500).send(err);
-    return res.status(200).send(zakaz);
-  });
+  
+  try {
+    const savedZakaz = await newZakaz.save();
+    console.log("Запись успешно сохранена:", savedZakaz); // Логирование сохраненной записи
+    res.status(200).send(savedZakaz);
+  } catch (err) {
+    console.error("Ошибка при сохранении:", err); // Логирование ошибки
+    res.status(500).send(err);
+  }
 });
+
+
 
 const PORT = 3001;
 app.listen(PORT, () => {
