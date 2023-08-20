@@ -33,7 +33,8 @@ const ZakazSchema = new mongoose.Schema({
   carBrand: String,
   carNumber: String,
   carType: String,
-  uslugi: [String] 
+  uslugi: [String],
+  totalPrice: Number 
 });
 
 
@@ -80,6 +81,15 @@ app.post('/add', async (req, res) => {
   } catch (err) {
     console.error("Ошибка при сохранении:", err);
     res.status(500).send(err);
+  }
+});
+
+app.get('/orders', async (req, res) => {
+  try {
+      const orders = await Zakaz.find();
+      res.status(200).json(orders);
+  } catch (err) {
+      res.status(500).json({ message: "Ошибка при получении истории заказов", error: err });
   }
 });
 
