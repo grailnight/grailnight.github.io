@@ -34,7 +34,13 @@ const ZakazSchema = new mongoose.Schema({
   carNumber: String,
   carType: String,
   uslugi: [String],
-  totalPrice: Number 
+  totalPrice: Number,
+  date: String,
+  washer: String,           // Добавляем поле для мойщика
+  paymentMethod: String,
+  cashPayment: Number,
+  transferPayment: Number,
+  qrPayment: Number
 });
 
 

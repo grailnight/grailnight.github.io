@@ -18,6 +18,10 @@
           </option>
         </select>
       </div>
+      <div>
+        <label>Дата:</label>
+        {{ currentDate }}
+      </div>
 
       <div>
         <label>Вид кузова:</label>
@@ -76,6 +80,10 @@
             <th>Тип кузова</th>
             <th>Услуги</th>
             <th>Итоговая стоимость</th>
+            <th>Дата</th>
+            <th>Мойщик</th>
+            <!-- Добавляем колонку для мойщика -->
+            <th>Способ оплаты</th>
           </tr>
         </thead>
         <tbody>
@@ -85,6 +93,15 @@
             <td>{{ order.carType }}</td>
             <td>{{ order.uslugi.join(", ") }}</td>
             <td>{{ order.totalPrice }} tg</td>
+            <td>{{ order.date }}</td>
+            <td>{{ order.washer }}</td>
+            <td>
+              {{
+                order.paymentMethod === "Раздельный"
+                  ? `Наличные: ${order.cashPayment} tg, Перевод: ${order.transferPayment} tg, QR: ${order.qrPayment} tg`
+                  : order.paymentMethod
+              }}
+            </td>
           </tr>
         </tbody>
       </table>
@@ -121,6 +138,7 @@ export default {
       cashPayment: 0,
       transferPayment: 0,
       qrPayment: 0,
+      currentDate: new Date().toISOString().substr(0, 10),
     };
   },
   watch: {
@@ -146,7 +164,11 @@ export default {
   methods: {
     isValidSplitPayment() {
       const totalSplitPayment =
-        this.cashPayment + this.transferPayment + this.qrPayment;
+        parseFloat(this.cashPayment) +
+        parseFloat(this.transferPayment) +
+        parseFloat(this.qrPayment);
+      console.log("Total split payment:", totalSplitPayment);
+      console.log("Total price:", this.totalPrice);
       return totalSplitPayment === this.totalPrice;
     },
     async loadOrderHistory() {
@@ -178,6 +200,7 @@ export default {
           cashPayment: this.cashPayment,
           transferPayment: this.transferPayment,
           qrPayment: this.qrPayment,
+          date: this.currentDate,
         })
         .then((response) => {
           console.log("Данные успешно добавлены:", response.data);
@@ -222,7 +245,7 @@ export default {
 <style scoped>
 div {
   font-family: "Arial", sans-serif;
-  max-width: 500px;
+  max-width: 800px;
   margin: 50px auto;
   padding: 20px;
   border: 1px solid #ccc;
