@@ -27,7 +27,8 @@ const uslugiList = [
   { name: "Полики", prices: { "Легковая": 500, "Кроссовер": 500, "Внедорожник": 500 } }
 ];
 
-mongoose.connect('mongodb://127.0.0.1:27017/Moika', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb+srv://telegram:telegram1@cluster0.ivbhl2b.mongodb.net/?tls=true', { useNewUrlParser: true, useUnifiedTopology: true });
+
 
 const ZakazSchema = new mongoose.Schema({
   carBrand: String,

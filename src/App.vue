@@ -1,5 +1,14 @@
 <template>
   <div>
+    <div>
+      <nav>
+        <ul>
+          <li><router-link to="/">Главная</router-link></li>
+          <li><router-link to="/admin">Панель администратора</router-link></li>
+        </ul>
+      </nav>
+      <router-view></router-view>
+    </div>
     <h1>Arnau</h1>
     <form @submit.prevent="submitForm">
       <div>
@@ -23,6 +32,14 @@
         {{ currentDate }}
       </div>
 
+      <Multiselect
+        v-model="selectedUslugiObjects"
+        :options="uslugi"
+        :multiple="true"
+        track-by="_id"
+        label="name"
+        placeholder="Выберите услуги"
+      ></Multiselect>
       <div>
         <label>Вид кузова:</label>
         <select v-model="carType">
@@ -34,14 +51,6 @@
           <option value="Внедорожник">Внедорожник</option>
         </select>
       </div>
-      <Multiselect
-        v-model="selectedUslugiObjects"
-        :options="uslugi"
-        :multiple="true"
-        track-by="_id"
-        label="name"
-        placeholder="Выберите услуги"
-      ></Multiselect>
       <div>Итоговая стоимость: {{ totalPrice }} tg.</div>
       <div>
         <label>Способ оплаты:</label>
@@ -142,7 +151,7 @@ export default {
     };
   },
   watch: {
-    selectedUslugi: "calculateTotalPrice",
+    selectedUslugiObjects: "calculateTotalPrice",
     carType: "calculateTotalPrice",
   },
   computed: {
